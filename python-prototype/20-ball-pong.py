@@ -2,6 +2,13 @@ import math
 import pygame
 import random
 
+def dist(x1,y1, x2,y2):
+    px = x2-x1
+    py = y2-y1
+    something = px*px + py*py
+    dist = math.sqrt(something)
+    return dist
+
 pygame.init()
 
 # Define some colors
@@ -61,6 +68,16 @@ while done == False:
             # detect back wall hit
             if ballPosX[iBall]>size[0]-ballRadius:
                 ballVelX[iBall]=-ballVelX[iBall]
+            # detect ball-ball collisions
+            for otherBall in range(iBall+1,numBalls):
+                # exploit behavioral properties of "for" so no need to check for iBall+1==numBalls
+                if dist(ballPosX[iBall],ballPosY[iBall],ballPosX[otherBall],ballPosY[otherBall])<2*ballRadius:
+                    tx=ballVelX[iBall]
+                    ty=ballVelY[iBall]
+                    ballVelX[iBall]=ballVelX[otherBall]
+                    ballVelY[iBall]=ballVelY[otherBall]
+                    ballVelX[otherBall]=tx
+                    ballVelY[otherBall]=ty
             # detect lost ball
             if ballPosX[iBall]<1:
                 ballAlive[iBall]=False
