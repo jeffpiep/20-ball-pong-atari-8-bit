@@ -1,0 +1,30 @@
+1 REM TURBO BASIC XL NOW
+10 GOSUB 1000 : REM INIT
+20 ? PP
+121 PP=INT(PADDLE(0)/2.71): MOVE 96-PP+PM,512+16+PM,96
+500 GOTO 20
+
+999 REM INITIALIZE 
+1000 RAMTOP = PEEK(106)
+1110 DIM S(1),P(2)
+1120 DL = DPEEK(560)+4 
+1130 P(0) = RAMTOP-8: P(1) = RAMTOP-4
+1135 S(0) = P(0)*256+64: S(1) = P(1)*256+64: SP=0
+1140 DPOKE 88,S(0): POKE 106,P(0)+4: CLS : DPOKE 88, S(1): POKE 106,P(1)+4: CLS
+
+1210 PMBASE=54279:REM                       Player-missile base pointer
+1220 GRACTL=53277:REM                       CTIA graphics control register
+1230 HPOSP0=53248:REM                       Horizontal position of P0
+1260 PY=48: REM                               BASIC's player vertical position
+1270 POKE PMBASE,RAMTOP-12:REM              Tell ANTIC where PM RAM is
+1280 PM=(RAMTOP-12)*256:REM                     Keep track of PM RAM address
+1290 POKE 559,46:REM                     Enable PM DMA with 2-line res
+1300 POKE GRACTL,3:REM                      Enable PM display
+1310 POKE HPOSP0,45:REM                    Declare horizontal position
+2100 FOR I=PM TO PM+95: REM store player in unused RAM
+2110 POKE I,0: NEXT I
+2120 FOR I=PM+96 TO PM+96+11: POKE I,3: NEXT I
+2121 FOR I=PM+96+12 TO PM+96+95: POKE I,0: NEXT I
+2180 POKE 704,88:REM                     Make the player pink
+
+2900 RETURN
