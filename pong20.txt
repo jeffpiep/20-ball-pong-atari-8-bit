@@ -7,11 +7,12 @@
 109 DPOKE 88,S(SP): POKE 106,P(SP)+4: CLS
 110 FOR I=1 TO N
 120 IF A(I)=0 THEN 430
+121 PP=PADDLE(0)/10: MOVE PY,PP,12: PY=PP
 130 X(I)=X(I)+U(I): Y(I)=Y(I)+V(I): NUMALIVE=NUMALIVE+1
-412 IF X(I)=1 THEN A(I)=0
-414 IF X(I)=38 THEN U(I)=-1
-416 IF Y(I)=1 THEN V(I)=1
-418 IF Y(I)=22 THEN V(I)=-1
+412 IF X(I)=0 THEN A(I)=0
+414 IF X(I)=39 THEN U(I)=-1
+416 IF Y(I)=0 THEN V(I)=1
+418 IF Y(I)=23 THEN V(I)=-1
 420 POKE S(SP)+X(I)+YY(Y(I)),160+I
 430 NEXT I
 440 IF NUMALIVE=0 THEN F=1
@@ -42,16 +43,16 @@
 1210 PMBASE=54279:REM                       Player-missile base pointer
 1220 GRACTL=53277:REM                       CTIA graphics control register
 1230 HPOSP0=53248:REM                       Horizontal position of P0
-1260 Y=48:REM                               BASIC's player vertical position
+1260 PY=48: REM                               BASIC's player vertical position
 1270 POKE PMBASE,RAMTOP-12:REM              Tell ANTIC where PM RAM is
 1280 MYPMBASE=(RAMTOP-12)*256:REM                     Keep track of PM RAM address
-1290 POKE 559,32+8+2:REM                     Enable PM DMA with 2-line res
-1300 POKE GRACTL,2:REM                      Enable PM display
-1310 POKE HPOSP0,10:REM                    Declare horizontal position
+1290 POKE 559,46:REM                     Enable PM DMA with 2-line res
+1300 POKE GRACTL,3:REM                      Enable PM display
+1310 POKE HPOSP0,45:REM                    Declare horizontal position
 2100 FOR I=MYPMBASE+512 TO MYPMBASE+640:REM this loop clears player
 2110 POKE I,0
 2120 NEXT I
-2130 FOR I=MYPMBASE+512+Y to MYPMBASE+523+Y
+2130 FOR I=MYPMBASE+512+PY to MYPMBASE+523+PY
 2150 POKE I,3
 2160 NEXT I
 2180 POKE 704,88:REM                     Make the player pink
